@@ -10,16 +10,17 @@ export const transferResultOverride = () => {
       const res = dataChanged.call(this, obs, result);
       const { idAutoSelectMin } = getValue("EnhancerSettings") || {};
       const items = result.items;
+      const prices = await fetchPrices(cards);
       if (!items || isMarketAlertApp || !idAutoSelectMin) {
         return res;
       }
       let minIndex = 0;
       let currentMin = Number.MAX_VALUE;
       for (let index = 0; index < items.length; index++) {
-        const { buyNowPrice } = items[index]._auction;
-        if (buyNowPrice < currentMin) {
+        const { prices } = items[index]._auction;
+        if (prices < currentMin) {
           minIndex = index;
-          currentMin = buyNowPrice;
+          currentMin = prices;
         }
       }
       if (minIndex) {
